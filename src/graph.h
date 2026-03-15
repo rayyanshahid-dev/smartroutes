@@ -7,7 +7,7 @@
 
 typedef struct coordinate {
 	double lat;
-	double long;
+	double lon;
 } coordinate;
 
 typedef struct edge {

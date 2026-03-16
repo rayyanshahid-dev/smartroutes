@@ -4,7 +4,7 @@ CC 	   = gcc
 TARGET = smartroutes 
 
 CFLAGS = -Wall -Wextra -O3 
-LDFLAGS = -lX11
+LDFLAGS = -lX11 -lm
 
 # Default target
 all: $(TARGET)

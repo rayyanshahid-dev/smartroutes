@@ -1,4 +1,4 @@
-/* Graph algorithms */
+/* Graph structures */
 
 #include <stdint.h>
 

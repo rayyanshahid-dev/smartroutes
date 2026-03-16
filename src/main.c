@@ -2,10 +2,12 @@
 
 #include <X11/Xlib.h>
 #include <stdio.h>
-#include "graph.h"
+
+#include "../includes/graph.h"
+#include "../includes/render.h"
+
 
 #define RENDER_IMPLEMENTATION
-#include "render.h"
 
 int main(void){
 	display();

@@ -1,5 +1,7 @@
 /* Graph algorithms */
 
+#include <stdint.h>
+
 #ifndef GRAPH_H
 #define GRAPH_H
 
@@ -13,6 +15,11 @@ typedef struct coordinate {
 typedef struct edge {
 	int target_node;
 	double weight;
+	int from, to;
+	uint64_t osm_id;
+	int oneway;
+	double length_m;
+	double speed_km;
 } edge; 
 
 typedef struct node {
@@ -22,6 +29,7 @@ typedef struct node {
 	int visited;
 	struct edge *edges;
 	int edge_count;
+	double polar_angle;
 } node;
 
 typedef struct graph {

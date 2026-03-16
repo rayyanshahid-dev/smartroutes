@@ -1,5 +1,5 @@
 SRCDIR = src/
-SRCS   = src/main.c
+SRCS   = src/*.c
 CC 	   = gcc
 TARGET = smartroutes 
 

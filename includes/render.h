@@ -18,7 +18,18 @@ int h = 600;
 void display() {
 	Display *dpy = XOpenDisplay(NULL);
     int scr = DefaultScreen(dpy);
-    Window wnd = XCreateSimpleWindow(dpy, RootWindow(dpy, scr), 0, 0, w, h, 0, BlackPixel(dpy, scr), WhitePixel(dpy, scr));
+    Window wnd = XCreateSimpleWindow(
+
+                                     dpy,
+                                     RootWindow(dpy, scr),
+                                     0,
+                                     0,
+                                     w,
+                                     h,
+                                     0,
+                                     BlackPixel(dpy, scr),
+                                     WhitePixel(dpy, scr));
+
     XStoreName(dpy, wnd, "SmartRoutes");
     XSelectInput(dpy, wnd, ExposureMask | KeyPressMask);
     XMapWindow(dpy, wnd);

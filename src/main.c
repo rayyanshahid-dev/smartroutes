@@ -11,5 +11,6 @@
 
 int main(void){
 	display();
+	algo_sweep();
 	return 0;
 }

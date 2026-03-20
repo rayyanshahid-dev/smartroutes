@@ -38,4 +38,10 @@ typedef struct graph {
 	int node_cap;
 } graph; 
 
+typedef struct vehicle {
+	uint32_t id;
+	int capacity;
+	int distance_limit;
+} vehicle; 
+
 #endif

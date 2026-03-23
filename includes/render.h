@@ -5,12 +5,29 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
+#if defined(__linux__) || defined(__unix__)
+	#define RENDER_PLATFORM_LINUX 1
+#elif defined(__WIN32__) || defined(__WIN64__)
+	#define RENDER_PLATFORM_WINDOWS 1
+#else
+	#error "Unsupported platform."
+#endif
 
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
+#if RENDER_PLATFORM_LINUX
+	#include <X11/Xlib.h>
+	#include <X11/Xutil.h>
+	#include <stdio.h>
+	#include <stdint.h>
+	#include <stdlib.h>
+#elif RENDER_PLATFORM_WINDOWS
+	#include <Windows.h>
+	#include <d3d9.h>
+	#include <d3dx9mesh.h>
+	#include <d3dx9xof.h>
+	#include <dxfile.h>
+	#include <DirectXMath.h>
+	#pragma comment(lib, "d3d9.lib")
+#endif
 
 int w = 800;
 int h = 600;

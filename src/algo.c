@@ -17,7 +17,12 @@ int algo_sweep(){
     node *n = &node_array[i];
     theta = atan2(n->pos.lat, n->pos.lon);  
     n->polar_angle = theta;
-  }
+ 	
+	
+
+   }
  return 0;
 }
+
+
 

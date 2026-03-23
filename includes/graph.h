@@ -1,5 +1,7 @@
 /* Graph structures */
 
+// copyright Rayyan Shahid 2026
+
 #include <stdint.h>
 
 #ifndef GRAPH_H

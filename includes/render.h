@@ -184,7 +184,6 @@ void render_destroy(Renderer *r){
 
 	#if PLATFORM_LINUX
 	if(r->image) XDestroyImage(r->image);
-	if(r->fb) free(r->fb);
 	if(r->gc) XFreeGC(r->dpy, r->gc);
 	if(r->win) XDestroyWindow(r->dpy, r->win);
 	if(r->dpy) XCloseDisplay(r->dpy);

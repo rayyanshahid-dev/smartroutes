@@ -3,7 +3,7 @@ SRCS   = src/*.c
 CC 	   = gcc
 TARGET = smartroutes 
 
-CFLAGS = -Wall -Wextra -O3 
+CFLAGS = -Wall -Wextra -std=c99 -O3 
 LDFLAGS = -lX11 -lm
 
 # Default target

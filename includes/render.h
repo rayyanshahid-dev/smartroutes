@@ -85,10 +85,10 @@ typedef struct Renderer {
 
 	char classname[32];
 
-};
+} Renderer;
 #endif
 
-typedef struct Renderer Renderer; 
+
 
 // separating X11 display function into own API - will wrap ifdefs later
 Renderer* render_create(int width, int height, const char* title){

@@ -72,13 +72,14 @@ typedef struct Renderer {
 #endif
 
 typedef struct Renderer Renderer; 
- Renderer* render_create(int width, int height, const char* title){
+
+// separating X11 display function into own API - will wrap ifdefs later
+Renderer* render_create(int width, int height, const char* title){
   Renderer* r = calloc(1, sizeof(Renderer));
 	if(!r) return NULL;
 
 	r->width        = width;
 	r->height       = height;
-	r->should_close = 0;
 
 	r->dpy = XOpenDisplay(NULL);
 	if(!r->dpy){
@@ -99,9 +100,9 @@ typedef struct Renderer Renderer;
 		BlackPixel(r->dpy, r->scr)
 	);
 
-	XStoreName(r->dpy, r->scr, title);
+	XStoreName(r->dpy, r->win, title);
 
-	XSelectInput(r->dpy, r->win, ExposureMask | KeyPressMask);
+	XSelectInput(r->dpy, r->win, ExposureMask | KeyPressMask | StructureNotifyMask);
 
 	r->gc = XCreateGC(r->dpy, r->win, 0, NULL);
 
@@ -128,7 +129,6 @@ void render_poll_events(Renderer *r){
 	while(XPending(r->dpy)){
 		XEvent e;
 		XNextEvent(r->dpy, &e);
-
 		switch(e.type){
 			case Expose:
 				break;
@@ -140,17 +140,48 @@ void render_poll_events(Renderer *r){
 			case ClientMessage:
 			 XClientMessageEvent* cme = (XClientMessageEvent*)&e;
 			 Atom wm_protocols = XInternAtom(r->dpy, "WM_PROTOCOLS", False);
-
 			 if(cme->message_type == wm_protocols &&
 			   (Atom)cme->data.l[0] == r->wm_delete_window){
 			 	 r->should_close = 1;
 			   } 	
 				break;
-		}
+		  }
+	#endif
+	
+ }
+}
+
+int render_should_close(Renderer *r){
+	return r->should_close;
+}
+
+void render_present(Renderer *r){
+	#if PLATFORM_LINUX
+  XPutImage(r->dpy, r->win, r->gc, r->image, 0, 0, 0, 0, r->width, r->height);
+  XFlush(r->dpy);
+  #endif  	
+}
+
+void render_destroy(Renderer *r){
+	if (!r) return;
+
+	#if PLATFORM_LINUX
+	if(r->image) XDestroyImage(r->image);
+	if(r->fb) free(r->fb);
+	if(r->gc) XFreeGC(r->dpy, r->gc);
+	if(r->win) XDestroyWindow(r->dpy, r->win);
+	if(r->dpy) XCloseDisplay(r->dpy);
 	#endif
 
-	}
+	free(r);
+}
 
+void render_clear(Renderer *r, uint32_t color){
+	#if PLATFORM_LINUX
+	for(int i = 0; i < r->width * r-> height; i++){
+		r->fb[i] = color;
+	}
+	#endif
 }
 
 #endif

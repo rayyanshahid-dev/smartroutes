@@ -9,6 +9,18 @@
 
 int main(void){
 
-  
+  Renderer *r = render_create(800, 600, "SmartRoutes");
+  if(!r){
+    fprintf(stderr, "Failed to create renderer!\n");
+    return 1;
+  }
+
+  while(!render_should_close(r)){
+    render_poll_events(r);
+    render_clear(r, 0x2E3440);
+    render_present(r);
+  }
+
+  render_destroy(r);
   return 0;
 }

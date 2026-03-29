@@ -17,7 +17,7 @@ int main(void){
 
   while(!render_should_close(r)){
     render_poll_events(r);
-    render_clear(r, 0x2E3440);
+    render_clear(r, 0x000000);
     render_present(r);
   }
 

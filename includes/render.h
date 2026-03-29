@@ -1,6 +1,23 @@
-/* copyright Rayyan Shahid 2026 */
+//Copyright 2026 Rayyan Shahid <rayyanshahid.dev@proton.me>
 
-// rendering code backend
+//Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+//The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+//THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+// rendering code backend - crossplatform D3D and X11
+
+// design philosophy:
+// - no external deps beyond standard C and OS native APIs (X11/D3D9)
+// - identical user API across both platforms
+// - software framebuffer rendering
+// - aims to run on hardware down to the Pentium III
+// - inspired by Handmade Hero
+//
+// usage:
+// #define RENDER_IMPLEMENTATION
+// #include "render.h"
 
 
 #ifndef RENDER_H
@@ -51,7 +68,7 @@ typedef struct Renderer {
 	int should_close;
 	XImage *image;
 	uint32_t* fb;
-}; 
+} Renderer; 
 #elif PLATFORM_WINDOWS
 typedef struct Renderer {
 	HWND hwnd;

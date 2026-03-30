@@ -2,8 +2,10 @@
 
 #include <X11/Xlib.h>
 #include <stdio.h>
-#include "../includes/graph.h"
+#include "../includes/io.h"
 #include "../includes/render.h"
+#include "../includes/io.h"
+
 
 #define RENDER_IMPLEMENTATION
 

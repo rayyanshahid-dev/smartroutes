@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <math.h>
-#include "../includes/graph.h"
+#include "../includes/io.h"
 
 int algo_sweep(){
   node node_array[16]; 

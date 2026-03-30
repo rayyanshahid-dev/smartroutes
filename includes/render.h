@@ -88,11 +88,11 @@ typedef struct Renderer {
 } Renderer;
 #endif
 
-
-
 // separating X11 display function into own API - will wrap ifdefs later
 Renderer* render_create(int width, int height, const char* title){
-  Renderer* r = calloc(1, sizeof(Renderer));
+  
+#if PLATFORM_LINUX
+Renderer* r = calloc(1, sizeof(Renderer));
 	if(!r) return NULL;
 
 	r->width        = width;
@@ -138,7 +138,7 @@ Renderer* render_create(int width, int height, const char* title){
 	XMapWindow(r->dpy, r->win);
 
 return r;
-
+#endif
 }
 
 void render_poll_events(Renderer *r){

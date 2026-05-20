@@ -1,10 +1,10 @@
-//Copyright 2026 Rayyan Shahid <rayyanshahid.dev@proton.me>
+// Copyright 2026 Rayyan Shahid <rayyanshahid.dev@proton.me>
 
-//Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-//The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-//THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // rendering code backend - crossplatform D3D and X11
 
@@ -39,6 +39,8 @@
 	#include <stdio.h>
 	#include <stdint.h>
 	#include <stdlib.h>
+	#include <math.h>
+	#include <limits.h>
 #elif PLATFORM_WINDOWS
 	#include <Windows.h>
 	#include <d3d9.h>
@@ -48,6 +50,10 @@
 	#include <DirectXMath.h>
 	#pragma comment(lib, "d3d9.lib")
 #endif
+
+#define SCALE_FACTOR 32767
+#define TRIG_TABLE_SIZE 360  // in my opinion, we don't need such extreme precision (e.g. using 3600) for the resolution
+#define PI 3.14159265358979323846
 
 // setting up globals and structs, platform-dependent
 
@@ -87,6 +93,45 @@ typedef struct Renderer {
 
 } Renderer;
 #endif
+
+// Global struct defs and functions for rendering components - platform-independent
+
+typedef struct {
+	int x; 
+	int y;
+} r_vec2;
+
+typedef struct {
+	int x; 
+	int y;
+	int z;
+} r_vec3;
+
+int r_dot_product(r_vec2 a, r_vec2 b) {
+    int64_t result = (int64_t)a.x * b.x + (int64_t)a.y * b.y;    
+    
+    /*if (result > INT_MAX) return INT_MAX;    
+    if (result < INT_MIN) return INT_MIN;*/    // leaving in the checks here but commented out, useful in case of overflow
+    
+    return (int)result;}
+
+
+// autogen tables because we're using ints!
+
+int16_t sin_table[TRIG_TABLE_SIZE] __attribute__((aligned(2)));
+int16_t cos_table[TRIG_TABLE_SIZE] __attribute__((aligned(2)));
+
+void init_trig_tables() {
+    for (int i = 0; i < TRIG_TABLE_SIZE; i++) {
+        float angle = (float)i * 2.0f * PI / TRIG_TABLE_SIZE;
+        sin_table[i] = (int16_t)(sin(angle) * SCALE_FACTOR);
+        cos_table[i] = (int16_t)(cos(angle) * SCALE_FACTOR);
+    	printf("i = %d | sin = %d | cos = %d\n", i, sin_table[i], cos_table[i]);
+    }
+
+    printf("Alignment: %zu\n", __alignof__(sin_table));
+}
+
 
 // separating X11 display function into own API - will wrap ifdefs later
 Renderer* render_create(int width, int height, const char* title){
@@ -131,9 +176,9 @@ Renderer* r = calloc(1, sizeof(Renderer));
 	}
 
 	r->image = XCreateImage(r->dpy, DefaultVisual(r->dpy, r->scr),
-																	DefaultDepth(r->dpy,  r->scr),
-																	ZPixmap, 0, (char*)r->fb,
-																	width, height, 32, 0);
+							DefaultDepth(r->dpy,  r->scr),
+							ZPixmap, 0, (char*)r->fb,
+							width, height, 32, 0);
 
 	XMapWindow(r->dpy, r->win);
 
@@ -198,6 +243,12 @@ void render_clear(Renderer *r, uint32_t color){
 		r->fb[i] = color;
 	}
 	#endif
+}
+
+void render_drawpixel(Renderer *r, int px, int py, uint32_t color){
+	if (px < 0 || px >= r->width || py < 0 || py >= r->height) return;
+	unsigned long pixel_value = color;
+	XPutPixel(r->image, px, py, pixel_value);
 }
 
 #endif

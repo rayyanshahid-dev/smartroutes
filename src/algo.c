@@ -9,6 +9,8 @@
 #include "../includes/io.h"
 
 int algo_sweep(){
+  
+  // part 1: conversion into Cartesian coordinates
   node node_array[16]; 
   int length = sizeof(node_array) / sizeof(node_array[0]);
   int i;
@@ -18,7 +20,7 @@ int algo_sweep(){
     theta = atan2(n->pos.lat, n->pos.lon);  
     n->polar_angle = theta;
  	
-	
+	  
 
    }
  return 0;

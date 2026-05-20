@@ -8,6 +8,7 @@
 
 
 #define RENDER_IMPLEMENTATION
+#define TRIG_TABLE_SIZE 360
 
 int main(void){
 
@@ -19,10 +20,11 @@ int main(void){
 
   while(!render_should_close(r)){
     render_poll_events(r);
-    render_clear(r, 0x000000);
+    render_clear(r, 0x181818);
     render_present(r);
   }
 
+/*  init_trig_tables(); */
   render_destroy(r);
   return 0;
 }

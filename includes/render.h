@@ -118,7 +118,7 @@ int r_dot_product(r_vec2 a, r_vec2 b) {
 
 // autogen tables because we're using ints!
 
-int16_t sin_table[TRIG_TABLE_SIZE] __attribute__((aligned(2)));
+/* int16_t sin_table[TRIG_TABLE_SIZE] __attribute__((aligned(2)));
 int16_t cos_table[TRIG_TABLE_SIZE] __attribute__((aligned(2)));
 
 void init_trig_tables() {
@@ -132,6 +132,7 @@ void init_trig_tables() {
     printf("Alignment: %zu\n", __alignof__(sin_table));
 }
 
+*/
 
 // separating X11 display function into own API - will wrap ifdefs later
 Renderer* render_create(int width, int height, const char* title){

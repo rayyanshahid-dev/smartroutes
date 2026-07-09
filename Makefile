@@ -4,6 +4,7 @@ CC 	   = gcc
 TARGET = smartroutes 
 
 CFLAGS = -Wall -Wextra -std=c99 -O3 
+DBGFLAG = -g
 LDFLAGS = -lX11 -lm
 
 # Default target
@@ -19,3 +20,8 @@ run:
 # Clean target to remove the compiled binary
 clean:
 	rm -f $(TARGET)
+
+debug:
+	$(TARGET): $(SRCS)
+		$(CC) $(DBGFLAG) -o $(TARGET) $(SRCS) $(LDFLAGS)	
+

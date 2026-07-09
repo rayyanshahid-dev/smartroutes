@@ -240,7 +240,8 @@ void render_destroy(Renderer *r){
 
 void render_clear(Renderer *r, uint32_t color){
 	#if PLATFORM_LINUX
-	for(int i = 0; i < r->width * r-> height; i++){
+	int total_pixels = r->width * r-> height;
+	for(int i = 0; i < total_pixels; i++){
 		r->fb[i] = color;
 	}
 	#endif

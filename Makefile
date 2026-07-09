@@ -19,7 +19,7 @@ run:
 
 # Clean target to remove the compiled binary
 clean:
-	rm -f $(TARGET) *.o *.data *.annotation
+	rm -f $(TARGET) *.o *.data *.annotation *.txt
 
 debug:
 	$(TARGET): $(SRCS)
